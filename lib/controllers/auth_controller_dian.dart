@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class AuthControllerNadhif with ChangeNotifier {
+class AuthControllerDian with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   
@@ -56,9 +56,9 @@ class AuthControllerNadhif with ChangeNotifier {
     }
   }
 
-  // -----------------------------
+  
   // LOGOUT
-  // -----------------------------
+
   Future<void> logoutDian() async {
     await _auth.signOut();
   }
