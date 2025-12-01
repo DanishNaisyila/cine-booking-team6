@@ -7,7 +7,7 @@ class AuthControllerDian with ChangeNotifier {
 
   
   // REGISTER
-  Future<String?> registerDian({
+  Future<String?> registerAzka({
     required String email,
     required String password,
     required String username,
@@ -43,7 +43,7 @@ class AuthControllerDian with ChangeNotifier {
   
   // LOGIN
   
-  Future<String?> loginDian({
+  Future<String?> loginAzka({
     required String email,
     required String password,
   }) async {
@@ -59,7 +59,7 @@ class AuthControllerDian with ChangeNotifier {
   
   // LOGOUT
 
-  Future<void> logoutDian() async {
+  Future<void> logoutAzka() async {
     await _auth.signOut();
   }
 
