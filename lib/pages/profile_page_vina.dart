@@ -2,7 +2,7 @@ import 'package:cine_booking_team6/controllers/auth_controller_dian.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/auth_controller_dian.dart';
-//import '../history/history_page_nadhif.dart';
+import '../pages/history_page_nadhif.dart';
 import '../pages/login_page_azka.dart';
 
 class ProfilePageVina extends StatelessWidget {
@@ -34,11 +34,11 @@ class ProfilePageVina extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (_) => const HistoryPageNadhif()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const HistoryPageNadhif()),
+                );
               },
               child: const Text("Lihat Riwayat Booking"),
             ),

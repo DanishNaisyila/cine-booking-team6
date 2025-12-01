@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/auth_controller_dian.dart';
 import 'register_page_azka.dart';
-// import 'profile_page_vina.dart';
+import 'profile_page_vina.dart';
 
 class LoginPageAzka extends StatefulWidget {
   const LoginPageAzka({super.key});
@@ -51,10 +51,10 @@ class _LoginPageAzkaState extends State<LoginPageAzka> {
                 }
 
                 // Jika login berhasil → ke profil
-                // Navigator.pushReplacement(
-                //   context,
-                //   MaterialPageRoute(builder: (_) => const ProfilePageVina()), 
-                // );
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ProfilePageVina()), 
+                );
               },
               child: const Text("Login"),
             ),
