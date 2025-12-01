@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
-
 import 'controllers/booking_controller_nadhif.dart';
 import 'models/movie_model_azka.dart';
 import 'pages/home_page_dian.dart';
@@ -64,6 +63,7 @@ class MovieLoaderNadhif extends StatelessWidget {
         List<MovieModelAzka> movies = docs.map(
           (e) => MovieModelAzka.fromMap(
             e.data() as Map<String, dynamic>,
+            e.id,
           ),
         ).toList();
 
