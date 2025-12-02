@@ -3,21 +3,33 @@ import 'package:provider/provider.dart';
 import '../models/movie_model_azka.dart';
 import '../controllers/booking_controller_nadhif.dart';
 
-class SeatPageDian extends StatelessWidget {
+class SeatPageDian extends StatefulWidget {
   final MovieModelAzka movie;
-
   const SeatPageDian({Key? key, required this.movie}) : super(key: key);
+
+  @override
+  State<SeatPageDian> createState() => _SeatPageDianState();
+}
+
+class _SeatPageDianState extends State<SeatPageDian> {
+  @override
+  void initState() {
+    super.initState();
+
+    // set data film sekali saja → agar tidak reset kursi saat rebuild
+    Future.microtask(() {
+      final bookingController =
+          Provider.of<BookingControllerNadhif>(context, listen: false);
+      bookingController.setMovieDataNadhif(
+        title: widget.movie.title,
+        basePrice: widget.movie.basePrice,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final bookingController = Provider.of<BookingControllerNadhif>(context);
-
-    // Pastikan judul & basePrice dikirim ke controller
-    bookingController.setMovieDataNadhif(
-  title: movie.title,
-  basePrice: movie.basePrice,
-);
-
 
     return Scaffold(
       appBar: AppBar(title: const Text("Select Seat")),
@@ -25,16 +37,18 @@ class SeatPageDian extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Text("Booking for: ${movie.title}",
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            Text(
+              "Booking for: ${widget.movie.title}",
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
             const SizedBox(height: 8),
-            Text("Base Price: Rp ${movie.basePrice}"),
+            Text("Base Price: Rp ${widget.movie.basePrice}"),
             const SizedBox(height: 20),
 
             // ===== GRID KURSI 6x8 =====
             Expanded(
               child: GridView.builder(
-                itemCount: 48, // 6 x 8
+                itemCount: 48,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 8,
                   mainAxisSpacing: 8,
@@ -49,7 +63,8 @@ class SeatPageDian extends StatelessWidget {
                   final seatCode = "$rowLetter$seatNumber";
 
                   final isSold = bookingController.soldSeatsNadhif.contains(seatCode);
-                  final isSelected = bookingController.selectedSeatsNadhif.contains(seatCode);
+                  final isSelected =
+                      bookingController.selectedSeatsNadhif.contains(seatCode);
 
                   Color seatColor;
                   if (isSold) {
@@ -80,17 +95,15 @@ class SeatPageDian extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
 
-            // ===== TOMBOL PROCEED =====
+            // ===== BUTTON PROCEED =====
             SizedBox(
               width: double.infinity,
               height: 48,
               child: ElevatedButton(
                 onPressed: () {
                   bookingController.calculateFinalPriceNadhif();
-
-
                   Navigator.pushNamed(context, "/checkout");
                 },
                 child: const Text("Proceed to Payment"),
