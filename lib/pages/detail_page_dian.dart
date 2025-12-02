@@ -10,10 +10,15 @@ class DetailPageDian extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white, 
       appBar: AppBar(
-        title: Text(movie.title),
-        backgroundColor: Colors.black,
+        title: Text(
+          movie.title,
+          style: const TextStyle(color: Colors.black), 
+        ),
+        backgroundColor: Colors.white, 
+        iconTheme: const IconThemeData(color: Colors.black), 
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -38,7 +43,7 @@ class DetailPageDian extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: Colors.black, 
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -54,14 +59,14 @@ class DetailPageDian extends StatelessWidget {
                 const SizedBox(width: 6),
                 Text(
                   "${movie.rating} / 10",
-                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                  style: const TextStyle(color: Colors.black87, fontSize: 16),
                 ),
                 const SizedBox(width: 18),
-                const Icon(Icons.timer_outlined, color: Colors.white70, size: 22),
+                const Icon(Icons.timer_outlined, color: Colors.black54, size: 22),
                 const SizedBox(width: 6),
                 Text(
                   "${movie.duration} min",
-                  style: const TextStyle(color: Colors.white70, fontSize: 16),
+                  style: const TextStyle(color: Colors.black54, fontSize: 16),
                 ),
               ],
             ),
@@ -76,7 +81,7 @@ class DetailPageDian extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 16,
                   height: 1.6,
-                  color: Colors.white70,
+                  color: Colors.black87, 
                 ),
                 textAlign: TextAlign.justify,
               ),
