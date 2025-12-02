@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models/movie_model_azka.dart';
 import '../controllers/booking_controller_nadhif.dart';
 
@@ -16,7 +17,7 @@ class _SeatPageDianState extends State<SeatPageDian> {
   void initState() {
     super.initState();
 
-    // set data film sekali saja → agar tidak reset kursi saat rebuild
+    // Set data movie hanya sekali (tidak reset saat rebuild)
     Future.microtask(() {
       final bookingController =
           Provider.of<BookingControllerNadhif>(context, listen: false);
@@ -41,11 +42,11 @@ class _SeatPageDianState extends State<SeatPageDian> {
               "Booking for: ${widget.movie.title}",
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             Text("Base Price: Rp ${widget.movie.basePrice}"),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
 
-            // ===== GRID KURSI 6x8 =====
+            // ===== GRID KURSI 6 x 8 =====
             Expanded(
               child: GridView.builder(
                 itemCount: 48,
@@ -55,8 +56,8 @@ class _SeatPageDianState extends State<SeatPageDian> {
                   crossAxisSpacing: 8,
                 ),
                 itemBuilder: (context, index) {
-                  final row = index ~/ 8; // 0–5
-                  final col = index % 8;  // 0–7
+                  final row = index ~/ 8;
+                  final col = index % 8;
 
                   final rowLetter = String.fromCharCode(65 + row); // A-F
                   final seatNumber = col + 1;
@@ -68,11 +69,11 @@ class _SeatPageDianState extends State<SeatPageDian> {
 
                   Color seatColor;
                   if (isSold) {
-                    seatColor = Colors.red;
+                    seatColor = Colors.red; // tidak bisa dipilih
                   } else if (isSelected) {
-                    seatColor = Colors.blue;
+                    seatColor = Colors.blue; // dipilih
                   } else {
-                    seatColor = Colors.grey.shade400;
+                    seatColor = Colors.grey.shade400; // default
                   }
 
                   return GestureDetector(
@@ -87,7 +88,7 @@ class _SeatPageDianState extends State<SeatPageDian> {
                       ),
                       child: Text(
                         seatCode,
-                        style: const TextStyle(fontSize: 11, color: Colors.white),
+                        style: const TextStyle(fontSize: 10, color: Colors.white),
                       ),
                     ),
                   );
@@ -102,10 +103,18 @@ class _SeatPageDianState extends State<SeatPageDian> {
               width: double.infinity,
               height: 48,
               child: ElevatedButton(
-                onPressed: () {
-                  bookingController.calculateFinalPriceNadhif();
-                  Navigator.pushNamed(context, "/checkout");
-                },
+                onPressed: bookingController.selectedSeatsNadhif.isEmpty
+                    ? null
+                    : () {
+                        bookingController.calculateFinalPriceNadhif();
+
+                        final userId = FirebaseAuth.instance.currentUser!.uid;
+                        Navigator.pushNamed(
+                          context,
+                          "/checkout",
+                          arguments: userId,
+                        );
+                      },
                 child: const Text("Proceed to Payment"),
               ),
             ),

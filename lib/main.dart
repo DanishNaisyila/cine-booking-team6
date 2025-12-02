@@ -4,12 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
 // Controllers
+import 'controllers/auth_controller_dian.dart';
 import 'controllers/booking_controller_nadhif.dart';
 
 // Models & Pages
 import 'models/movie_model_azka.dart';
 import 'pages/home_page_dian.dart';
-import 'pages/seat_page_dian.dart';
+import 'pages/login_page_azka.dart';
 import 'pages/checkout_page_nadhif.dart';
 import 'firebase_options.dart';
 
@@ -29,9 +30,8 @@ class BookingApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => BookingControllerNadhif(),
-        ),
+        ChangeNotifierProvider(create: (_) => AuthControllerDian()),
+        ChangeNotifierProvider(create: (_) => BookingControllerNadhif()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -41,7 +41,7 @@ class BookingApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        // ROUTE SYSTEM — karena Checkout Page butuh PARAMETER
+        // karena Checkout membutuhkan parameter userId
         onGenerateRoute: (settings) {
           if (settings.name == "/checkout") {
             final userId = settings.arguments as String;
@@ -52,12 +52,14 @@ class BookingApp extends StatelessWidget {
           return null;
         },
 
-        home: const MovieLoaderNadhif(),
+        
+        home: const LoginPageAzka(),
       ),
     );
   }
 }
 
+// Loader Film setelah login
 class MovieLoaderNadhif extends StatelessWidget {
   const MovieLoaderNadhif({super.key});
 
