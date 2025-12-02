@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class BookingControllerNadhif with ChangeNotifier {
   // STATE
   List<String> selectedSeatsNadhif = [];
+  List<String> soldSeatsNadhif = [];
   int totalPriceNadhif = 0;
 
   String movieTitleNadhif = "";
