@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+
+// Controllers
+import 'controllers/auth_controller_dian.dart';
 import 'controllers/booking_controller_nadhif.dart';
+
+// Models & Pages
 import 'models/movie_model_azka.dart';
 import 'pages/home_page_dian.dart';
+import 'pages/login_page_azka.dart';
+import 'pages/checkout_page_nadhif.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -23,9 +30,8 @@ class BookingApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => BookingControllerNadhif(),
-        ),
+        ChangeNotifierProvider(create: (_) => AuthControllerDian()),
+        ChangeNotifierProvider(create: (_) => BookingControllerNadhif()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -34,38 +40,49 @@ class BookingApp extends StatelessWidget {
           useMaterial3: true,
           primarySwatch: Colors.blue,
         ),
-        home: const MovieLoaderNadhif(),
+
+        // karena Checkout membutuhkan parameter userId
+        onGenerateRoute: (settings) {
+          if (settings.name == "/checkout") {
+            final userId = settings.arguments as String;
+            return MaterialPageRoute(
+              builder: (context) => CheckoutPageNadhif(userId: userId),
+            );
+          }
+          return null;
+        },
+
+        
+        home: const LoginPageAzka(),
       ),
     );
   }
 }
 
+// Loader Film setelah login
 class MovieLoaderNadhif extends StatelessWidget {
   const MovieLoaderNadhif({super.key});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance
-          .collection("movies")
-          .snapshots(),
+      stream: FirebaseFirestore.instance.collection("movies").snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
+            body: Center(child: CircularProgressIndicator()),
           );
         }
 
         final docs = snapshot.data!.docs;
-
-        List<MovieModelAzka> movies = docs.map(
-          (e) => MovieModelAzka.fromMap(
-            e.data() as Map<String, dynamic>,
-            e.id,
-          ),
-        ).toList();
+        List<MovieModelAzka> movies = docs
+            .map(
+              (e) => MovieModelAzka.fromMap(
+                e.data() as Map<String, dynamic>,
+                e.id,
+              ),
+            )
+            .toList();
 
         return HomePageDian(movies: movies);
       },
